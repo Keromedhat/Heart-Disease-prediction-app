@@ -138,4 +138,4 @@ if st.button("🔍 Predict"):
 
 # ---------------- Footer ----------------
 st.markdown("---")
-st.caption("Developed by Kiro Medhat | Heart Disease
+st.caption("Developed by Kiro Medhat | Heart Disease Prediction Dashboard")
