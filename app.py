@@ -6,36 +6,47 @@ import plotly.graph_objects as go
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 
-# ---------------- CSS for Dark Theme + Style ----------------
+# ---------------- CSS for Clear, Bright Theme ----------------
 st.markdown("""
 <style>
+/* Background of main app */
 [data-testid="stAppViewContainer"] {
-    background-color: #0E1117;
-    color: #FAFAFA;
+    background-color: #F0F4F8; /* Soft light blue */
+    color: #1F2937;             /* Dark text for readability */
 }
 
+/* Headers */
 h1, h2, h3, h4, h5, h6 {
-    color: #FF6B6B;
+    color: #1E40AF;  /* Strong blue for titles */
 }
 
+/* Buttons */
 .stButton>button {
-    background-color: #FF6B6B;
+    background-color: #2563EB; /* Bright blue */
     color: white;
     border-radius: 12px;
     height: 3em;
     width: 100%;
     font-size: 1.1em;
+    font-weight: bold;
 }
 
-div.stNumberInput, div.stSelectbox {
-    background-color: #1E1E2E;
-    border-radius: 12px;
+/* Inputs and selectboxes */
+div.stNumberInput input, div.stSelectbox select {
+    background-color: #E0E7FF;  /* Light purple/blue input background */
+    color: #1F2937;             /* Dark text */
+    border-radius: 8px;
     padding: 5px;
-    color: white;
 }
 
+/* Placeholder text */
+div.stNumberInput input::placeholder, div.stSelectbox select option {
+    color: #6B7280;  /* Gray placeholder */
+}
+
+/* Markdown text */
 .stMarkdown {
-    color: #FAFAFA;
+    color: #1F2937;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -83,38 +94,40 @@ if st.button("🔍 Predict"):
 
     st.markdown("### 📊 Prediction Result")
 
+    # Risk levels with clear color coding
     if prob < 40:
         st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely healthy.")
-        color = "green"
+        color = "#10B981"  # Green
     elif 40 <= prob <= 70:
         st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup.")
-        color = "yellow"
+        color = "#F59E0B"  # Amber
     else:
         st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor.")
-        color = "red"
+        color = "#EF4444"  # Red
 
+    # Gauge chart
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=prob,
-        delta={'reference': 50, 'increasing': {'color': "red"}},
-        title={'text': "Heart Disease Risk (%)", 'font': {'color': "white", 'size': 20}},
+        delta={'reference': 50, 'increasing': {'color': "#EF4444"}},
+        title={'text': "Heart Disease Risk (%)", 'font': {'color': "#1F2937", 'size': 20}},
         gauge={
-            'axis': {'range': [0, 100], 'tickcolor': "white"},
+            'axis': {'range': [0, 100], 'tickcolor': "#1F2937"},
             'bar': {'color': color},
             'steps': [
-                {'range': [0, 40], 'color': "#4CAF50"},
-                {'range': [40, 70], 'color': "#FFC107"},
-                {'range': [70, 100], 'color': "#F44336"}
+                {'range': [0, 40], 'color': "#A7F3D0"},   # light green
+                {'range': [40, 70], 'color': "#FEF08A"},  # light amber
+                {'range': [70, 100], 'color': "#FCA5A5"}  # light red
             ],
             'threshold': {
-                'line': {'color': "white", 'width': 4},
+                'line': {'color': "#1F2937", 'width': 4},
                 'thickness': 0.75,
                 'value': prob
             }
         },
-        number={'font': {'color': "white", 'size': 24}}
+        number={'font': {'color': "#1F2937", 'size': 24}}
     ))
-    fig.update_layout(paper_bgcolor="#0E1117", font_color="white")
+    fig.update_layout(paper_bgcolor="#F0F4F8", font_color="#1F2937")
     st.plotly_chart(fig, use_container_width=True)
 
 # ---------------- Footer ----------------
