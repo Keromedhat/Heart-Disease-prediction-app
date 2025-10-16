@@ -6,23 +6,23 @@ import plotly.graph_objects as go
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 
-# ---------------- CSS for Black + Red Theme ----------------
+# ---------------- CSS for Black + Red Theme (Clear) ----------------
 st.markdown("""
 <style>
 /* Background of main app */
 [data-testid="stAppViewContainer"] {
-    background-color: #0B0B0B; /* Very dark background */
-    color: #F5F5F5;             /* Light text */
+    background-color: #0B0B0B;
+    color: #F5F5F5;
 }
 
 /* Headers */
 h1, h2, h3, h4, h5, h6 {
-    color: #EF4444;  /* Bright red for titles */
+    color: #EF4444;
 }
 
 /* Buttons */
 .stButton>button {
-    background-color: #EF4444; /* Red button */
+    background-color: #EF4444;
     color: white;
     border-radius: 12px;
     height: 3em;
@@ -31,20 +31,26 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
 }
 
-/* Inputs and selectboxes */
+/* Labels above inputs */
+div[data-baseweb="number-input"] label, 
+div[data-baseweb="select"] label {
+    color: #F5F5F5 !important;
+    font-weight: bold;
+}
+
+/* Inputs themselves */
 div.stNumberInput input, div.stSelectbox select {
-    background-color: #1C1C1C;  /* Dark gray input background */
-    color: #F5F5F5;             /* White text */
+    background-color: #1C1C1C;
+    color: #F5F5F5 !important;
     border-radius: 8px;
     padding: 5px;
 }
 
 /* Placeholder text */
 div.stNumberInput input::placeholder, div.stSelectbox select option {
-    color: #AAAAAA;  /* Light gray placeholder */
+    color: #AAAAAA;
 }
 
-/* Markdown text */
 .stMarkdown {
     color: #F5F5F5;
 }
@@ -70,13 +76,13 @@ col1, col2 = st.columns(2)
 with col1:
     age = st.number_input("🎂 Age (العمر) — Normal: 20–60 yrs", 1, 120, 50)
     sex = st.selectbox("🚻 Sex (0 = Female / أنثى, 1 = Male / ذكر)", [0, 1])
-    cp = st.number_input("💔 Chest Pain Type (0–3) — Normal: 0 = Typical angina", 0, 3, 1)
+    cp = st.number_input("💔 Chest Pain Type (0–3) — Normal: 0 = Typical angina / طبيعي", 0, 3, 1)
     trestbps = st.number_input("🩺 Resting Blood Pressure (mmHg) — Normal: 90–120", 80, 200, 120)
     chol = st.number_input("💉 Serum Cholesterol (mg/dl) — Normal: <200", 100, 600, 200)
     fbs = st.selectbox("🩸 Fasting Blood Sugar > 120 mg/dl — Normal: 0 = False / طبيعي", [0, 1])
 
 with col2:
-    restecg = st.number_input("📈 Resting ECG Results (0–2) — Normal: 0 = Normal", 0, 2, 1)
+    restecg = st.number_input("📈 Resting ECG Results (0–2) — Normal: 0 = Normal / طبيعي", 0, 2, 1)
     thalch = st.number_input("❤️ Max Heart Rate (bpm) — Normal: 120–200", 60, 220, 150)
     exang = st.selectbox("🏃 Exercise Induced Angina — Normal: 0 = No / لا", [0, 1])
     oldpeak = st.number_input("📉 Oldpeak (ST depression) — Normal: 0–1", 0.0, 6.0, 1.0)
@@ -102,34 +108,4 @@ if st.button("🔍 Predict"):
         st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup / متوسط")
         color = "#FBBF24"  # amber
     else:
-        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor / عالي")
-        color = "#EF4444"  # red
-
-    # Gauge chart
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number+delta",
-        value=prob,
-        delta={'reference': 50, 'increasing': {'color': "#EF4444"}},
-        title={'text': "Heart Disease Risk (%)", 'font': {'color': "#F5F5F5", 'size': 20}},
-        gauge={
-            'axis': {'range': [0, 100], 'tickcolor': "#F5F5F5"},
-            'bar': {'color': color},
-            'steps': [
-                {'range': [0, 40], 'color': "#6EE7B7"},  # light green
-                {'range': [40, 70], 'color': "#FCD34D"}, # light amber
-                {'range': [70, 100], 'color': "#F87171"} # light red
-            ],
-            'threshold': {
-                'line': {'color': "#F5F5F5", 'width': 4},
-                'thickness': 0.75,
-                'value': prob
-            }
-        },
-        number={'font': {'color': "#F5F5F5", 'size': 24}}
-    ))
-    fig.update_layout(paper_bgcolor="#0B0B0B", font_color="#F5F5F5")
-    st.plotly_chart(fig, use_container_width=True)
-
-# ---------------- Footer ----------------
-st.markdown("---")
-st.caption("Developed by Kiro Medhat | Heart Disease Prediction Project")
+        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor
