@@ -6,23 +6,23 @@ import plotly.graph_objects as go
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 
-# ---------------- CSS for Clear, Bright Theme ----------------
+# ---------------- CSS for Black + Red Theme ----------------
 st.markdown("""
 <style>
 /* Background of main app */
 [data-testid="stAppViewContainer"] {
-    background-color: #F0F4F8; /* Soft light blue */
-    color: #1F2937;             /* Dark text for readability */
+    background-color: #0B0B0B; /* Very dark background */
+    color: #F5F5F5;             /* Light text */
 }
 
 /* Headers */
 h1, h2, h3, h4, h5, h6 {
-    color: #1E40AF;  /* Strong blue for titles */
+    color: #EF4444;  /* Bright red for titles */
 }
 
 /* Buttons */
 .stButton>button {
-    background-color: #2563EB; /* Bright blue */
+    background-color: #EF4444; /* Red button */
     color: white;
     border-radius: 12px;
     height: 3em;
@@ -33,27 +33,27 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Inputs and selectboxes */
 div.stNumberInput input, div.stSelectbox select {
-    background-color: #E0E7FF;  /* Light purple/blue input background */
-    color: #1F2937;             /* Dark text */
+    background-color: #1C1C1C;  /* Dark gray input background */
+    color: #F5F5F5;             /* White text */
     border-radius: 8px;
     padding: 5px;
 }
 
 /* Placeholder text */
 div.stNumberInput input::placeholder, div.stSelectbox select option {
-    color: #6B7280;  /* Gray placeholder */
+    color: #AAAAAA;  /* Light gray placeholder */
 }
 
 /* Markdown text */
 .stMarkdown {
-    color: #1F2937;
+    color: #F5F5F5;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------- Title ----------------
 st.markdown("## 🫀 Heart Disease Prediction App")
-st.markdown("Enter the patient's details below to predict the likelihood of heart disease using the trained model.")
+st.markdown("Enter the patient's details below / أدخل بيانات المريض")
 
 # ---------------- Load Model ----------------
 @st.cache_resource
@@ -64,25 +64,25 @@ def load_model():
 model = load_model()
 
 # ---------------- Input Fields ----------------
-st.markdown("### 🧍‍♂️ Patient Information")
+st.markdown("### 🧍‍♂️ Patient Information / معلومات المريض")
 col1, col2 = st.columns(2)
 
 with col1:
-    age = st.number_input("🎂 Age (العمر) — 20–60 yrs", 1, 120, 50)
-    sex = st.selectbox("🚻 Sex (0 = Female, 1 = Male) / الجنس", [0, 1])
-    cp = st.number_input("💔 Chest Pain Type (0–3)", 0, 3, 1)
-    trestbps = st.number_input("🩺 Resting Blood Pressure (mmHg)", 80, 200, 120)
-    chol = st.number_input("💉 Serum Cholesterol (mg/dl)", 100, 600, 200)
-    fbs = st.selectbox("🩸 Fasting Blood Sugar > 120 mg/dl", [0, 1])
+    age = st.number_input("🎂 Age (العمر) — Normal: 20–60 yrs", 1, 120, 50)
+    sex = st.selectbox("🚻 Sex (0 = Female / أنثى, 1 = Male / ذكر)", [0, 1])
+    cp = st.number_input("💔 Chest Pain Type (0–3) — Normal: 0 = Typical angina", 0, 3, 1)
+    trestbps = st.number_input("🩺 Resting Blood Pressure (mmHg) — Normal: 90–120", 80, 200, 120)
+    chol = st.number_input("💉 Serum Cholesterol (mg/dl) — Normal: <200", 100, 600, 200)
+    fbs = st.selectbox("🩸 Fasting Blood Sugar > 120 mg/dl — Normal: 0 = False / طبيعي", [0, 1])
 
 with col2:
-    restecg = st.number_input("📈 Resting ECG Results (0–2)", 0, 2, 1)
-    thalch = st.number_input("❤️ Max Heart Rate (bpm)", 60, 220, 150)
-    exang = st.selectbox("🏃 Exercise Induced Angina", [0, 1])
-    oldpeak = st.number_input("📉 Oldpeak (ST depression)", 0.0, 6.0, 1.0)
-    slope = st.number_input("📊 Slope of ST Segment (0–2)", 0, 2, 1)
-    ca = st.number_input("🫀 Number of Major Vessels (0–3)", 0, 3, 0)
-    thal = st.number_input("🧬 Thalassemia (0=Normal,1=Fixed,2=Reversible)", 0, 2, 1)
+    restecg = st.number_input("📈 Resting ECG Results (0–2) — Normal: 0 = Normal", 0, 2, 1)
+    thalch = st.number_input("❤️ Max Heart Rate (bpm) — Normal: 120–200", 60, 220, 150)
+    exang = st.selectbox("🏃 Exercise Induced Angina — Normal: 0 = No / لا", [0, 1])
+    oldpeak = st.number_input("📉 Oldpeak (ST depression) — Normal: 0–1", 0.0, 6.0, 1.0)
+    slope = st.number_input("📊 Slope of ST Segment (0–2) — Normal: 1 = Upsloping / طبيعي", 0, 2, 1)
+    ca = st.number_input("🫀 Number of Major Vessels (0–3) — Normal: 0", 0, 3, 0)
+    thal = st.number_input("🧬 Thalassemia (0=Normal / طبيعي,1=Fixed / ثابت,2=Reversible / عكوس)", 0, 2, 1)
 
 # ---------------- Prediction ----------------
 if st.button("🔍 Predict"):
@@ -92,42 +92,42 @@ if st.button("🔍 Predict"):
     prediction = model.predict(input_data)[0]
     prob = model.predict_proba(input_data)[0][1] * 100
 
-    st.markdown("### 📊 Prediction Result")
+    st.markdown("### 📊 Prediction Result / نتيجة التنبؤ")
 
-    # Risk levels with clear color coding
+    # Risk levels with black & red theme
     if prob < 40:
-        st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely healthy.")
-        color = "#10B981"  # Green
+        st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely healthy / منخفض")
+        color = "#10B981"  # green
     elif 40 <= prob <= 70:
-        st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup.")
-        color = "#F59E0B"  # Amber
+        st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup / متوسط")
+        color = "#FBBF24"  # amber
     else:
-        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor.")
-        color = "#EF4444"  # Red
+        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor / عالي")
+        color = "#EF4444"  # red
 
     # Gauge chart
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=prob,
         delta={'reference': 50, 'increasing': {'color': "#EF4444"}},
-        title={'text': "Heart Disease Risk (%)", 'font': {'color': "#1F2937", 'size': 20}},
+        title={'text': "Heart Disease Risk (%)", 'font': {'color': "#F5F5F5", 'size': 20}},
         gauge={
-            'axis': {'range': [0, 100], 'tickcolor': "#1F2937"},
+            'axis': {'range': [0, 100], 'tickcolor': "#F5F5F5"},
             'bar': {'color': color},
             'steps': [
-                {'range': [0, 40], 'color': "#A7F3D0"},   # light green
-                {'range': [40, 70], 'color': "#FEF08A"},  # light amber
-                {'range': [70, 100], 'color': "#FCA5A5"}  # light red
+                {'range': [0, 40], 'color': "#6EE7B7"},  # light green
+                {'range': [40, 70], 'color': "#FCD34D"}, # light amber
+                {'range': [70, 100], 'color': "#F87171"} # light red
             ],
             'threshold': {
-                'line': {'color': "#1F2937", 'width': 4},
+                'line': {'color': "#F5F5F5", 'width': 4},
                 'thickness': 0.75,
                 'value': prob
             }
         },
-        number={'font': {'color': "#1F2937", 'size': 24}}
+        number={'font': {'color': "#F5F5F5", 'size': 24}}
     ))
-    fig.update_layout(paper_bgcolor="#F0F4F8", font_color="#1F2937")
+    fig.update_layout(paper_bgcolor="#0B0B0B", font_color="#F5F5F5")
     st.plotly_chart(fig, use_container_width=True)
 
 # ---------------- Footer ----------------
