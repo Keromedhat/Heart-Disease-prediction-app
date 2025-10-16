@@ -6,69 +6,78 @@ import plotly.graph_objects as go
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 
-# ---------------- CSS for Black + Red Theme ----------------
-# ---------------- CSS for Black + Red Theme ----------------
+# ---------------- Improved CSS (Dark Gray + Red + Light Inputs) ----------------
 st.markdown("""
 <style>
-/* Background of main app */
+/* Main background */
 [data-testid="stAppViewContainer"] {
-    background-color: #0B0B0B;
-    color: #F5F5F5;
+    background-color: #181818; /* رمادي غامق مريح */
+    color: #FFFFFF;
+    font-family: "Segoe UI", sans-serif;
 }
 
-/* Headers */
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
-    color: #EF4444;
+    color: #FF4B4B;
+    font-weight: 700;
 }
 
 /* Buttons */
 .stButton>button {
-    background-color: #EF4444;
+    background: linear-gradient(90deg, #EF4444, #DC2626);
     color: white;
-    border-radius: 12px;
+    border: none;
+    border-radius: 10px;
     height: 3em;
     width: 100%;
     font-size: 1.1em;
     font-weight: bold;
+    transition: 0.3s;
+}
+.stButton>button:hover {
+    background: linear-gradient(90deg, #F87171, #EF4444);
+    box-shadow: 0 0 10px #EF4444;
 }
 
-/* Labels */
+/* Input labels */
 div[data-baseweb="number-input"] label, 
 div[data-baseweb="select"] label {
-    color: #F5F5F5 !important;
-    font-weight: bold;
+    color: #E5E5E5 !important;
+    font-weight: 600 !important;
 }
 
-/* Inputs */
-input, select, textarea {
-    background-color: #1F1F1F !important; /* أفتح شوي */
-    color: #FFFFFF !important;            /* نص أبيض واضح */
-    border: 1px solid #EF4444 !important; /* حدود حمراء خفيفة */
+/* Number Inputs + Select boxes */
+div[data-baseweb="number-input"], div[data-baseweb="select"] {
+    background-color: #F5F5F5 !important; /* فاتح وواضح */
+    color: #000000 !important;
     border-radius: 8px !important;
-    padding: 6px 10px !important;
-    font-size: 1em !important;
+    border: 1px solid #BBBBBB !important;
+    padding: 6px !important;
 }
-
-/* Placeholder text */
-::placeholder {
-    color: #BBBBBB !important;
+input, select, textarea {
+    background-color: #F5F5F5 !important;
+    color: #000000 !important;
+    border-radius: 8px !important;
 }
 
 /* Focus effect */
-input:focus, select:focus, textarea:focus {
-    border: 1px solid #F87171 !important;
-    outline: none !important;
+div[data-baseweb="number-input"]:focus-within,
+div[data-baseweb="select"]:focus-within {
+    border: 1px solid #EF4444 !important;
     box-shadow: 0 0 6px #EF4444 !important;
 }
 
+/* Placeholders */
+::placeholder {
+    color: #444 !important;
+}
+
 /* Markdown text */
-.stMarkdown {
-    color: #F5F5F5;
+.stMarkdown, .stCaption, .stText {
+    color: #EDEDED !important;
 }
 </style>
 """, unsafe_allow_html=True)
-
-
 
 # ---------------- Title ----------------
 st.markdown("## 🫀 Heart Disease Prediction App")
@@ -115,40 +124,4 @@ if st.button("🔍 Predict"):
 
     # Risk levels
     if prob < 40:
-        st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely healthy / منخفض")
-        color = "#10B981"  # green
-    elif 40 <= prob <= 70:
-        st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup / متوسط")
-        color = "#FBBF24"  # amber
-    else:
-        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor / عالي")
-        color = "#EF4444"  # red
-
-    # Gauge chart
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number+delta",
-        value=prob,
-        delta={'reference': 50, 'increasing': {'color': "#EF4444"}},
-        title={'text': "Heart Disease Risk (%)", 'font': {'color': "#F5F5F5", 'size': 20}},
-        gauge={
-            'axis': {'range': [0, 100], 'tickcolor': "#F5F5F5"},
-            'bar': {'color': color},
-            'steps': [
-                {'range': [0, 40], 'color': "#6EE7B7"},  # light green
-                {'range': [40, 70], 'color': "#FCD34D"}, # light amber
-                {'range': [70, 100], 'color': "#F87171"} # light red
-            ],
-            'threshold': {
-                'line': {'color': "#F5F5F5", 'width': 4},
-                'thickness': 0.75,
-                'value': prob
-            }
-        },
-        number={'font': {'color': "#F5F5F5", 'size': 24}}
-    ))
-    fig.update_layout(paper_bgcolor="#0B0B0B", font_color="#F5F5F5")
-    st.plotly_chart(fig, use_container_width=True)
-
-# ---------------- Footer ----------------
-st.markdown("---")
-st.caption("Developed by Kiro Medhat | Heart Disease Prediction Dashboard")
+        st.success(f"🩵 Low Risk ({prob:.2f}%) — Lik
