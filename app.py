@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 
-# ---------------- CSS for Black + Red Theme (Clear) ----------------
+# ---------------- CSS for Black + Red Theme ----------------
 st.markdown("""
 <style>
 /* Background of main app */
@@ -100,7 +100,7 @@ if st.button("🔍 Predict"):
 
     st.markdown("### 📊 Prediction Result / نتيجة التنبؤ")
 
-    # Risk levels with black & red theme
+    # Risk levels
     if prob < 40:
         st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely healthy / منخفض")
         color = "#10B981"  # green
@@ -108,4 +108,34 @@ if st.button("🔍 Predict"):
         st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup / متوسط")
         color = "#FBBF24"  # amber
     else:
-        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor
+        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor / عالي")
+        color = "#EF4444"  # red
+
+    # Gauge chart
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number+delta",
+        value=prob,
+        delta={'reference': 50, 'increasing': {'color': "#EF4444"}},
+        title={'text': "Heart Disease Risk (%)", 'font': {'color': "#F5F5F5", 'size': 20}},
+        gauge={
+            'axis': {'range': [0, 100], 'tickcolor': "#F5F5F5"},
+            'bar': {'color': color},
+            'steps': [
+                {'range': [0, 40], 'color': "#6EE7B7"},  # light green
+                {'range': [40, 70], 'color': "#FCD34D"}, # light amber
+                {'range': [70, 100], 'color': "#F87171"} # light red
+            ],
+            'threshold': {
+                'line': {'color': "#F5F5F5", 'width': 4},
+                'thickness': 0.75,
+                'value': prob
+            }
+        },
+        number={'font': {'color': "#F5F5F5", 'size': 24}}
+    ))
+    fig.update_layout(paper_bgcolor="#0B0B0B", font_color="#F5F5F5")
+    st.plotly_chart(fig, use_container_width=True)
+
+# ---------------- Footer ----------------
+st.markdown("---")
+st.caption("Developed by Kiro Medhat | Heart Disease
