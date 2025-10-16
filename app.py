@@ -3,14 +3,14 @@ import joblib
 import numpy as np
 import plotly.graph_objects as go
 
-# ---------------- إعداد الصفحة ----------------
+# ---------------- Page Config ----------------
 st.set_page_config(page_title="Heart Disease Prediction App", layout="centered")
 
-# ---------------- العنوان ----------------
+# ---------------- Title ----------------
 st.markdown("## 🫀 Heart Disease Prediction App")
-st.markdown("أدخل بيانات المريض بدقة للحصول على النتيجة\nEnter the patient’s details below to get prediction")
+st.markdown("Enter the patient’s details below to get prediction")
 
-# ---------------- تحميل الموديل ----------------
+# ---------------- Load Model ----------------
 @st.cache_resource
 def load_model():
     model = joblib.load('best_xgboost_model.pkl')
@@ -18,79 +18,79 @@ def load_model():
 
 model = load_model()
 
-# ---------------- إدخال البيانات ----------------
+# ---------------- Input Section ----------------
 st.markdown("### 🧍‍♂️ Patient Information")
 col1, col2 = st.columns(2)
 
 with col1:
-    age = st.number_input("🎂 العمر (Age)", 1, 120, 50)
-    st.caption("🔹 Normal range: 20–60 years")
+    age = st.number_input("🎂 Age", 1, 120, 50)
+    st.caption("Normal range: 20–60 years")
 
-    sex = st.selectbox("🚻 الجنس (Sex)", [0, 1], format_func=lambda x: "أنثى (Female)" if x == 0 else "ذكر (Male)")
-    st.caption("🔹 0 = Female | 1 = Male")
+    sex = st.selectbox("🚻 Gender", [0, 1],
+                       format_func=lambda x: "أنثى (Female)" if x == 0 else "ذكر (Male)")
 
-    cp = st.selectbox("💔 نوع ألم الصدر (Chest Pain Type)", [0, 1, 2, 3],
+    cp = st.selectbox("💔 Chest Pain Type", [0, 1, 2, 3],
                       format_func=lambda x: {
-                          0: "🟢 0 = Typical Angina (طبيعي)",
-                          1: "🟡 1 = Atypical Angina (مختلف بسيط)",
-                          2: "🔴 2 = Non-anginal Pain (غير ذبحة)",
-                          3: "🔴 3 = Asymptomatic (بدون أعراض)"
+                          0: "🟦 S = Typical Angina (طبيعي)",
+                          1: "🟩 A = Atypical Angina (مختلف بسيط)",
+                          2: "🟧 B = Non-anginal Pain (وجع غير قلبي)",
+                          3: "🟥 C = Asymptomatic (مفيش أعراض)"
                       }[x])
-    st.caption("🔹 Chest pain type classification")
+    st.caption("Chest pain category from S (Best) to C (Worst)")
 
-    trestbps = st.number_input("🩺 ضغط الدم وقت الراحة (Resting BP)", 80, 200, 120)
-    st.caption("🔹 Normal: 90–120 mmHg")
+    trestbps = st.number_input("🩺 Resting Blood Pressure", 80, 200, 120)
+    st.caption("Normal: 90–120 mmHg")
 
-    chol = st.number_input("💉 الكوليسترول (Cholesterol)", 100, 600, 200)
-    st.caption("🔹 Normal: <200 mg/dl")
+    chol = st.number_input("💉 Serum Cholesterol", 100, 600, 200)
+    st.caption("Normal: <200 mg/dl")
 
-    fbs = st.selectbox("🩸 سكر الدم الصايم (Fasting Blood Sugar)", [0, 1],
-                       format_func=lambda x: "🟢 0 = Normal (<120)" if x == 0 else "🔴 1 = High (>120)")
+    fbs = st.selectbox("🩸 Fasting Blood Sugar", [0, 1],
+                       format_func=lambda x: "🟦 S = Normal (<120) طبيعي" if x == 0 else "🟥 C = High (>120) عالي")
 
 with col2:
-    restecg = st.selectbox("📈 رسم القلب وقت الراحة (Resting ECG)", [0, 1, 2],
+    restecg = st.selectbox("📈 Resting ECG", [0, 1, 2],
                            format_func=lambda x: {
-                               0: "🟢 0 = Normal (طبيعي)",
-                               1: "🟡 1 = ST-T abnormality (خلل بسيط)",
-                               2: "🔴 2 = Left ventricular hypertrophy (تضخم)"
+                               0: "🟦 S = Normal (طبيعي)",
+                               1: "🟧 B = ST-T Abnormality (خلل بسيط)",
+                               2: "🟥 C = LVH (تضخم في القلب)"
                            }[x])
-    st.caption("🔹 ECG result categories")
+    st.caption("ECG results from S (Normal) to C (Abnormal)")
 
-    thalch = st.number_input("❤️ أقصى معدل نبض (Max Heart Rate)", 60, 220, 150)
-    st.caption("🔹 Normal: 120–200 bpm")
+    thalch = st.number_input("❤️ Max Heart Rate", 60, 220, 150)
+    st.caption("Normal: 120–200 bpm")
 
-    exang = st.selectbox("🏃 ألم مع المجهود (Exercise Angina)", [0, 1],
-                         format_func=lambda x: "🟢 0 = No (مافيش)" if x == 0 else "🔴 1 = Yes (فيه)")
+    exang = st.selectbox("🏃 Exercise Induced Angina", [0, 1],
+                         format_func=lambda x: "🟦 S = No (مافيش)" if x == 0 else "🟥 C = Yes (فيه)")
 
-    oldpeak = st.number_input("📉 انخفاض ST (Oldpeak)", 0.0, 6.0, 1.0)
-    st.caption("🔹 Normal: 0–1")
+    oldpeak = st.number_input("📉 Oldpeak (ST Depression)", 0.0, 6.0, 1.0)
+    st.caption("Normal: 0–1")
 
-    slope = st.selectbox("📊 ميل مقطع ST (Slope)", [0, 1, 2],
+    slope = st.selectbox("📊 Slope of ST Segment", [0, 1, 2],
                          format_func=lambda x: {
-                             0: "🔴 0 = Downsloping (نازل)",
-                             1: "🟢 1 = Upsloping (طالع طبيعي)",
-                             2: "🟡 2 = Flat (مستوٍ)"
+                             0: "🟥 C = Downsloping (نازل)",
+                             1: "🟦 S = Upsloping (طالع طبيعي)",
+                             2: "🟧 B = Flat (مستوٍ)"
                          }[x])
-    st.caption("🔹 Shape of ST segment")
+    st.caption("Shape of ST segment from S (Good) to C (Weak)")
 
-    ca = st.selectbox("🫀 عدد الأوعية المسدودة (CA)", [0, 1, 2, 3],
+    ca = st.selectbox("🫀 Major Vessels (CA)", [0, 1, 2, 3],
                       format_func=lambda x: {
-                          0: "🟢 0 = No blocked vessels (سليم)",
-                          1: "🟡 1 = 1 vessel (واحد)",
-                          2: "🔴 2 = 2 vessels (اتنين)",
-                          3: "🔴 3 = 3 vessels (تلاتة)"
+                          0: "🟦 S = 0 (سليم)",
+                          1: "🟩 A = 1 (واحد)",
+                          2: "🟧 B = 2 (اتنين)",
+                          3: "🟥 C = 3 (تلاتة)"
                       }[x])
-    st.caption("🔹 Major blood vessels count")
+    st.caption("Blocked vessels count — lower is better")
 
-    thal = st.selectbox("🧬 الثلاسيميا (Thalassemia)", [0, 1, 2],
+    thal = st.selectbox("🧬 Thalassemia", [0, 1, 2],
                         format_func=lambda x: {
-                            0: "🟢 0 = Normal (طبيعي)",
-                            1: "🔴 1 = Fixed Defect (ثابت)",
-                            2: "🟡 2 = Reversible (عكوس)"
+                            0: "🟦 S = Normal (طبيعي)",
+                            1: "🟥 C = Fixed Defect (ثابت)",
+                            2: "🟧 B = Reversible (عكوس)"
                         }[x])
-    st.caption("🔹 Thalassemia type")
+    st.caption("Thalassemia levels from S (Normal) to C (Defect)")
 
-# ---------------- التنبؤ ----------------
+# ---------------- Prediction ----------------
 if st.button("🔍 Predict"):
     input_data = np.array([[age, sex, cp, trestbps, chol,
                             fbs, restecg, thalch, exang, oldpeak, slope, ca, thal]])
@@ -101,13 +101,13 @@ if st.button("🔍 Predict"):
     st.markdown("### 📊 Prediction Result")
 
     if prob < 40:
-        st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely Healthy")
+        st.success(f"🟩 Low Risk ({prob:.2f}%) — Likely Healthy")
         color = "#10B981"
     elif 40 <= prob <= 70:
-        st.warning(f"🟡 Medium Risk ({prob:.2f}%) — Needs Checkup")
+        st.warning(f"🟧 Medium Risk ({prob:.2f}%) — Needs Checkup")
         color = "#FBBF24"
     else:
-        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a Doctor")
+        st.error(f"🟥 High Risk ({prob:.2f}%) — Consult a Doctor")
         color = "#EF4444"
 
     fig = go.Figure(go.Indicator(
@@ -128,6 +128,6 @@ if st.button("🔍 Predict"):
     ))
     st.plotly_chart(fig, use_container_width=True)
 
-# ---------------- الفوتر ----------------
+# ---------------- Footer ----------------
 st.markdown("---")
 st.caption("👨‍💻 Developed by Kerolos Medhat")
