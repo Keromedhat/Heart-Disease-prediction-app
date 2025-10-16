@@ -4,11 +4,11 @@ import numpy as np
 import plotly.graph_objects as go
 
 # ---------------- Page Config ----------------
-st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
+st.set_page_config(page_title="تطبيق التنبؤ بأمراض القلب", layout="centered")
 
 # ---------------- Title ----------------
-st.markdown("## 🫀 Heart Disease Prediction App")
-st.markdown("Enter the patient's details below / أدخل بيانات المريض")
+st.markdown("## 🫀 تطبيق التنبؤ بأمراض القلب")
+st.markdown("أدخل بيانات المريض أدناه بدقة للحصول على التنبؤ")
 
 # ---------------- Load Model ----------------
 @st.cache_resource
@@ -19,45 +19,69 @@ def load_model():
 model = load_model()
 
 # ---------------- Input Fields ----------------
-st.markdown("### 🧍‍♂️ Patient Information / معلومات المريض")
+st.markdown("### 🧍‍♂️ بيانات المريض")
 col1, col2 = st.columns(2)
 
 with col1:
-    age = st.number_input("🎂 Age (العمر) — Normal: 20–60 yrs", 1, 120, 50)
-    sex = st.selectbox("🚻 Sex (0 = Female / أنثى, 1 = Male / ذكر)", [0, 1])
-    cp = st.number_input("💔 Chest Pain Type (0–3) — Normal: 0 = Typical angina / طبيعي", 0, 3, 1)
-    trestbps = st.number_input("🩺 Resting Blood Pressure (mmHg) — Normal: 90–120", 80, 200, 120)
-    chol = st.number_input("💉 Serum Cholesterol (mg/dl) — Normal: <200", 100, 600, 200)
-    fbs = st.selectbox("🩸 Fasting Blood Sugar > 120 mg/dl — Normal: 0 = False / طبيعي", [0, 1])
+    age = st.number_input("🎂 العمر (Age)", 1, 120, 50, help="الطبيعي من ٢٠ لـ ٦٠ سنة")
+    st.caption("🔹 الطبيعي: من ٢٠ لـ ٦٠ سنة")
+
+    sex = st.selectbox("🚻 الجنس (Sex)", [0, 1], format_func=lambda x: "أنثى" if x == 0 else "ذكر")
+    st.caption("🔹 0 = أنثى / 1 = ذكر")
+
+    cp = st.number_input("💔 نوع ألم الصدر (Chest Pain Type)", 0, 3, 1)
+    st.caption("🔹 0 = طبيعي / 1–3 = أنواع مختلفة من الألم")
+
+    trestbps = st.number_input("🩺 ضغط الدم أثناء الراحة (Resting BP)", 80, 200, 120)
+    st.caption("🔹 الطبيعي من ٩٠ لـ ١٢٠ ملم زئبق")
+
+    chol = st.number_input("💉 الكوليسترول (Cholesterol)", 100, 600, 200)
+    st.caption("🔹 الطبيعي أقل من ٢٠٠ مجم/دل")
+
+    fbs = st.selectbox("🩸 سكر الدم الصائم (Fasting Blood Sugar)", [0, 1], format_func=lambda x: "طبيعي (0)" if x == 0 else "مرتفع (1)")
+    st.caption("🔹 طبيعي أقل من ١٢٠ مجم/دل")
 
 with col2:
-    restecg = st.number_input("📈 Resting ECG Results (0–2) — Normal: 0 = Normal / طبيعي", 0, 2, 1)
-    thalch = st.number_input("❤️ Max Heart Rate (bpm) — Normal: 120–200", 60, 220, 150)
-    exang = st.selectbox("🏃 Exercise Induced Angina — Normal: 0 = No / لا", [0, 1])
-    oldpeak = st.number_input("📉 Oldpeak (ST depression) — Normal: 0–1", 0.0, 6.0, 1.0)
-    slope = st.number_input("📊 Slope of ST Segment (0–2) — Normal: 1 = Upsloping / طبيعي", 0, 2, 1)
-    ca = st.number_input("🫀 Number of Major Vessels (0–3) — Normal: 0", 0, 3, 0)
-    thal = st.number_input("🧬 Thalassemia (0=Normal / طبيعي,1=Fixed / ثابت,2=Reversible / عكوس)", 0, 2, 1)
+    restecg = st.number_input("📈 نتائج تخطيط القلب (Resting ECG)", 0, 2, 1)
+    st.caption("🔹 0 = طبيعي / 1 أو 2 = غير طبيعي")
+
+    thalch = st.number_input("❤️ أقصى معدل نبض (Max Heart Rate)", 60, 220, 150)
+    st.caption("🔹 الطبيعي من ١٢٠ لـ ٢٠٠ نبضة بالدقيقة")
+
+    exang = st.selectbox("🏃 ألم مع المجهود (Exercise Angina)", [0, 1], format_func=lambda x: "لا (0)" if x == 0 else "نعم (1)")
+    st.caption("🔹 طبيعي: لا يوجد ألم أثناء المجهود")
+
+    oldpeak = st.number_input("📉 انخفاض ST (Oldpeak)", 0.0, 6.0, 1.0)
+    st.caption("🔹 الطبيعي من ٠ لـ ١")
+
+    slope = st.number_input("📊 ميل قطعة ST (Slope)", 0, 2, 1)
+    st.caption("🔹 1 = طبيعي / 0 أو 2 = غير طبيعي")
+
+    ca = st.number_input("🫀 عدد الأوعية الرئيسية المسدودة (CA)", 0, 3, 0)
+    st.caption("🔹 الطبيعي = ٠")
+
+    thal = st.number_input("🧬 الثلاسيميا (Thal)", 0, 2, 1)
+    st.caption("🔹 0 = طبيعي / 1 = ثابت / 2 = عكوس")
 
 # ---------------- Prediction ----------------
-if st.button("🔍 Predict"):
+if st.button("🔍 تنبؤ"):
     input_data = np.array([[age, sex, cp, trestbps, chol,
                             fbs, restecg, thalch, exang, oldpeak, slope, ca, thal]])
 
     prediction = model.predict(input_data)[0]
     prob = model.predict_proba(input_data)[0][1] * 100
 
-    st.markdown("### 📊 Prediction Result / نتيجة التنبؤ")
+    st.markdown("### 📊 نتيجة التنبؤ")
 
     # Risk levels
     if prob < 40:
-        st.success(f"🩵 Low Risk ({prob:.2f}%) — Likely healthy / منخفض")
+        st.success(f"🩵 خطر منخفض ({prob:.2f}%) — الحالة مطمئنة")
         color = "#10B981"  # green
     elif 40 <= prob <= 70:
-        st.warning(f"🟡 Medium Risk ({prob:.2f}%) — May need checkup / متوسط")
+        st.warning(f"🟡 خطر متوسط ({prob:.2f}%) — يُنصح بالفحص الطبي")
         color = "#FBBF24"  # amber
     else:
-        st.error(f"🔴 High Risk ({prob:.2f}%) — Consult a doctor / عالي")
+        st.error(f"🔴 خطر مرتفع ({prob:.2f}%) — يُنصح بمراجعة الطبيب فورًا")
         color = "#EF4444"  # red
 
     # Gauge chart
@@ -65,24 +89,20 @@ if st.button("🔍 Predict"):
         mode="gauge+number+delta",
         value=prob,
         delta={'reference': 50, 'increasing': {'color': "#EF4444"}},
-        title={'text': "Heart Disease Risk (%)", 'font': {'size': 20}},
+        title={'text': "نسبة خطر الإصابة بالقلب (%)", 'font': {'size': 20}},
         gauge={
             'axis': {'range': [0, 100]},
             'bar': {'color': color},
             'steps': [
-                {'range': [0, 40], 'color': "#6EE7B7"},  # light green
-                {'range': [40, 70], 'color': "#FCD34D"}, # light amber
-                {'range': [70, 100], 'color': "#F87171"} # light red
+                {'range': [0, 40], 'color': "#6EE7B7"},
+                {'range': [40, 70], 'color': "#FCD34D"},
+                {'range': [70, 100], 'color': "#F87171"}
             ],
-            'threshold': {
-                'line': {'color': "black", 'width': 4},
-                'thickness': 0.75,
-                'value': prob
-            }
+            'threshold': {'line': {'color': "black", 'width': 4}, 'thickness': 0.75, 'value': prob}
         }
     ))
     st.plotly_chart(fig, use_container_width=True)
 
 # ---------------- Footer ----------------
 st.markdown("---")
-st.caption("Developed by Kiro Medhat | Heart Disease Prediction App")
+st.caption("👨‍💻 تم التطوير بواسطة كيرلس مدحت | تطبيق التنبؤ بأمراض القلب")
