@@ -9,18 +9,18 @@ st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 # ---------------- CSS for Black + Red Theme ----------------
 st.markdown("""
 <style>
-/* Background of main app */
+/* ===== General App Background ===== */
 [data-testid="stAppViewContainer"] {
     background-color: #0B0B0B;
     color: #F5F5F5;
 }
 
-/* Headers */
+/* ===== Titles ===== */
 h1, h2, h3, h4, h5, h6 {
     color: #EF4444;
 }
 
-/* Buttons */
+/* ===== Buttons ===== */
 .stButton>button {
     background-color: #EF4444;
     color: white;
@@ -29,33 +29,45 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     font-size: 1.1em;
     font-weight: bold;
+    border: none;
 }
 
-/* Labels above inputs */
-div[data-baseweb="number-input"] label, 
-div[data-baseweb="select"] label {
-    color: #F5F5F5 !important;
-    font-weight: bold;
+/* ===== Input Fields (fixes visibility issue) ===== */
+div[data-baseweb="input"] > div:first-child,
+div[data-baseweb="select"] > div:first-child,
+div[data-baseweb="number-input"] > div:first-child {
+    background-color: #1F1F1F !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+    border: 1px solid #EF4444 !important;
 }
 
-/* Inputs themselves */
-div.stNumberInput input, div.stSelectbox select {
-    background-color: #1C1C1C;
-    color: #F5F5F5 !important;
-    border-radius: 8px;
-    padding: 5px;
+/* The actual text input */
+input, select {
+    background-color: #1F1F1F !important;
+    color: #FFFFFF !important;
 }
 
 /* Placeholder text */
-div.stNumberInput input::placeholder, div.stSelectbox select option {
-    color: #AAAAAA;
+::placeholder {
+    color: #AAAAAA !important;
 }
 
+/* Focus highlight */
+div[data-baseweb="input"]:focus-within,
+div[data-baseweb="number-input"]:focus-within,
+div[data-baseweb="select"]:focus-within {
+    border: 1px solid #F87171 !important;
+    box-shadow: 0 0 6px #EF4444 !important;
+}
+
+/* Markdown text */
 .stMarkdown {
     color: #F5F5F5;
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ---------------- Title ----------------
 st.markdown("## 🫀 Heart Disease Prediction App")
