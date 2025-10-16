@@ -7,20 +7,21 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Heart Disease Prediction", layout="centered")
 
 # ---------------- CSS for Black + Red Theme ----------------
+# ---------------- CSS for Black + Red Theme ----------------
 st.markdown("""
 <style>
-/* ===== General App Background ===== */
+/* Background of main app */
 [data-testid="stAppViewContainer"] {
     background-color: #0B0B0B;
     color: #F5F5F5;
 }
 
-/* ===== Titles ===== */
+/* Headers */
 h1, h2, h3, h4, h5, h6 {
     color: #EF4444;
 }
 
-/* ===== Buttons ===== */
+/* Buttons */
 .stButton>button {
     background-color: #EF4444;
     color: white;
@@ -29,35 +30,34 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     font-size: 1.1em;
     font-weight: bold;
-    border: none;
 }
 
-/* ===== Input Fields (fixes visibility issue) ===== */
-div[data-baseweb="input"] > div:first-child,
-div[data-baseweb="select"] > div:first-child,
-div[data-baseweb="number-input"] > div:first-child {
-    background-color: #1F1F1F !important;
-    color: #FFFFFF !important;
+/* Labels */
+div[data-baseweb="number-input"] label, 
+div[data-baseweb="select"] label {
+    color: #F5F5F5 !important;
+    font-weight: bold;
+}
+
+/* Inputs */
+input, select, textarea {
+    background-color: #1F1F1F !important; /* أفتح شوي */
+    color: #FFFFFF !important;            /* نص أبيض واضح */
+    border: 1px solid #EF4444 !important; /* حدود حمراء خفيفة */
     border-radius: 8px !important;
-    border: 1px solid #EF4444 !important;
-}
-
-/* The actual text input */
-input, select {
-    background-color: #1F1F1F !important;
-    color: #FFFFFF !important;
+    padding: 6px 10px !important;
+    font-size: 1em !important;
 }
 
 /* Placeholder text */
 ::placeholder {
-    color: #AAAAAA !important;
+    color: #BBBBBB !important;
 }
 
-/* Focus highlight */
-div[data-baseweb="input"]:focus-within,
-div[data-baseweb="number-input"]:focus-within,
-div[data-baseweb="select"]:focus-within {
+/* Focus effect */
+input:focus, select:focus, textarea:focus {
     border: 1px solid #F87171 !important;
+    outline: none !important;
     box-shadow: 0 0 6px #EF4444 !important;
 }
 
@@ -67,6 +67,7 @@ div[data-baseweb="select"]:focus-within {
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # ---------------- Title ----------------
